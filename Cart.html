@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfect Pizza</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="//unpkg.com/alpinejs" defer></script>
+</head>
+
+<body>
+    <div class="container" x-data="{
+        showCart: false,
+        smallQty : 0,
+        mediumQty : 0,
+        largeQty : 0, 
+        smallTotal : 0.00,
+        mediumTotal : 0.00, 
+        largeTotal : 0.00 , 
+        VAT: 0.00,
+
+        buySmall() {
+            this.smallTotal += 305.00; 
+            this.smallQty +=1;
+            
+        },
+        removeSmall() {
+            if (this.smallQty > 0) {
+                this.smallTotal -= 305.00;
+                this.smallQty -=1;
+            } 
+        }, 
+        buyMedium() {
+            this.mediumTotal += 310.00; 
+            this.mediumQty +=1;
+            
+        },
+        removeMedium() {
+            if (this.mediumQty > 0) {
+                this.mediumTotal -= 310.00;
+                this.mediumQty -=1;
+            } 
+        },
+        buyLarge() {
+            this.largeTotal += 350.00; 
+            this.largeQty +=1;
+            
+        },
+        removeLarge() {
+            if (this.largeQty > 0) {
+                this.largeTotal -= 350.00;
+                this.largeQty -=1;
+            } 
+        },  
+        subTotal() {
+            return this.smallTotal + this.mediumTotal + this.largeTotal;
+        },
+        totalQty() {
+            return this.smallQty + this.mediumQty + this.largeQty; 
+        },
+    
+        paymentMessage:'',
+        pay:false,
+        paymentAmount:0,
+
+        makePayment(){
+            let amount = parseInt(this.paymentAmount); let price = parseInt(this.subTotal());
+            
+            if(amount == 0){
+              this.paymentMessage = 'Enter Payment Amount.';
+            }
+            else if(amount >= price){
+              this.paymentMessage = 'Payment Successful !';
+
+              
+
+              setTimeout(() => {
+                this.clearCart();
+                this.pay = false;
+              }, 3000);
+
+            
+            } else if (amount < price){
+            this.paymentMessage = 'Payment Declined !';
+            }
+        },
+
+        clearCart() {
+            this.smallQty = 0; this.mediumQty = 0; this.largeQty = 0; this.smallTotal = 0.00; 
+            this.mediumTotal = 0.00; this.largeTotal = 0.00 ; this.VAT = 0.00;  this.paymentMessage = '';
+            ; this.paymentAmount = 0; this.showCart = false;
+        }
+    }">
+      
+        <header>
+            <button>
+            <div class="cart-icon" @click="showCart=!showCart">
+                <i class="fa fa-shopping-bag"></i>
+                <b x-text="totalQty()" class="col"><span></span></b> <b class="col">Items</b>
+            </div>
+            <strong>show/close cart</strong>
+        </button>
+            <h1>
+                <b>PERFACT PIZZA</b>
+            </h1>
+        </header>
+
+        <div class="cart" x-show="showCart">
+            <div class="PizzaCart">
+                <h6>Please Place your Oder Here</h6>
+                <h5>Shopping Cart</h5>
+                <table align="center">
+                    <tr>
+                        <div class="tablerow">
+                            <th>Shopping Cart</th>
+                            <th></th>
+                            <th>
+                                <a href="">Remove All</a>
+                            </th>
+                            </th>
+                        </div>
+
+                    </tr>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div>
+                                <div class="cart-info">
+                                    <div>
+                                        <p>Margherita Pizza</p>
+                                        <small>Price: R305.00</small>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="q" x-on:click="buySmall">+</button>
+                            <button class="q" x-on:click="removeSmall">-</button>
+                            Qty: <span x-text="smallQty"></span>
+
+                        </td>
+                        <td>
+                            R <span x-text="smallTotal.toFixed(2)"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div>
+                                <div class="cart-info">
+                                    <div>
+                                        <p>Basil-and-Chicken</p>
+                                        <small>Price: R310.00</small>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="q" x-on:click="buyMedium">+</button>
+                            <button class="q" x-on:click="removeMedium">-</button>
+                            Qty: <span x-text="mediumQty"></span>
+                        </td>
+                        <td>
+                            R <span x-text="mediumTotal.toFixed(2)"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div>
+                                <div class="cart-info">
+                                    <div>
+                                        <p>Peperoni-and-Cheese</p>
+                                        <small>Price: R350</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="q" x-on:click="buyLarge">+</button>
+                            <button class="q" x-on:click="removeLarge">-</button>
+                            Qty: <span x-text="largeQty"></span>
+                        </td>
+                        <td>
+                            R <span x-text="largeTotal.toFixed(2)"></span>
+                        </td>
+                    </tr>
+                </table>
+                <div class="total-price">
+                    <table align="center">
+                        <tr class="success">
+                            <td><b>Total Cost</b></td>
+                            <td><b>
+                                    R <span x-text="subTotal().toFixed(2)"></span>
+                                </b></td>
+                        </tr>
+                        <tr x-show="subTotal()>0">
+                            <div x-show="pay">
+                                <td colspan="3">
+                                    <button x-show="!pay" @click="pay=true" class="nice">Checkout</button>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr x-show="pay" class="success">
+                            <td colspan="2"><b>Payment Amount:</b></td>
+                            <td>
+                                <b>R <span><input type="number" min="0" x-model="paymentAmount"></span></b>
+                            </td>
+                        </tr>
+                        <tr x-show="pay">
+                            <td colspan="3" class="message" x-text="paymentMessage"><i></i></td>
+                        </tr>
+                        <tr x-show="pay">
+                            <td colspan="3">
+                                <button @click="makePayment()" class="nice">Pay Now</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container">
+            <h4>Plathero of Pizzas to choose from</h4>
+            <div class="thePizzas box">
+                <div class="pizza1 Box">
+                    <div>
+                        <h6>Large Pizza</h6>
+                        <h5> Peperoni-and-Cheese</h5>
+                        <h7>Price: R350,00</h7>
+                        <p>This is a tried-and-true cheese Pizza<br></br>
+                            made of dough,souce cheese and pepperoni </p>
+                    </div>
+                    <div class="pizza1">
+                        <img src="images/pic4.jpg" width="300px" height="400px">
+                    </div>
+                    <button x-on:click="buySmall">
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i> Add To Cart
+                    </button>
+                </div>
+
+
+                <div class="pizza2 Box">
+
+                    <h6>Meduim pizza</h6>
+                    <h5> Basil-and-Chicken</h5>
+                    <h7>Price: R310,00</h7>
+                    <p>This is a Basil Pizza made of basil, Vienna sausage, salami, Arugula<br></br>
+                        red peppers, provolone cheese, chicken stripes, and tai </p>
+                    <div class="pizza2">
+                        <img src="images/pic2.jpg" alt="smallpizza images width=" 200px height="300px">
+                    </div>
+                    <button x-on:click="buyMedium">
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i> Add To Cart
+                    </button>
+
+                </div>
+
+
+                <div class="pizza3 Box">
+                    <h6>Small Pizza</h6>
+                    <h5> Margherita Pizza </h5>
+                    <h7>Price: R305,00</h7>
+                    <p>This is an italian mother of pizzas made of lashing fresh tomato souce <br></br>
+                        and mozarella cheese with added basil leaves on top. </p>
+
+                    <div class="pizza1">
+                        <img src="images/pic3.jpg" width="400px" height="300px">
+                    </div>
+
+
+                    <button x-on:click="buyLarge">
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>Add To Cart
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <footer>
+                <div class="allFooter">
+                    <div class="names box">
+                        <div>Name: Perfact Pizza </div>
+                        <div>Owner: Mat Greene</div>
+                        <div>contact No: 013 223 1678</div>
+                        <div>email: perfactpizza@gmail.com</div>
+                    </div>
+
+
+                    <div class="contacts box">
+                        <div>company Adress: p.o Box 1092</div>
+                        <div>Mbombela</div>
+                        <div>Sidlamafa</div>
+                        <div>1332</div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    </footer>
+    </div>
+</body>
+
+</html>
